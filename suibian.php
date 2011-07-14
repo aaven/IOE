@@ -1,5 +1,5 @@
 <html>
-<head><title>Register</title></head>
+<head><title>aaven modify</title></head>
 <body>
 	<h1>Registration</h1>
 	<form method="post" action="register.php">

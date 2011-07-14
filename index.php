@@ -7,7 +7,7 @@ header("location:login.php");
 
 <html>
 <body>
-Welcome!!!
+Welcome!!! Aaven 
 <a href='/logout.php'>Log out</a>
 </body>
 </html>

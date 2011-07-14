@@ -1,7 +1,7 @@
 <?php
 $dbhost = 'localhost';
-$dbuser = '';
-$dbpwd	= '';
+$dbuser = 'root';
+$dbpwd	= 'root';
 $dbname = 'ioefinance';
 $con=mysqli_connect($dbhost,$dbuser,$dbpwd,$dbname);
 if(!$con)

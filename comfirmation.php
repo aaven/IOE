@@ -32,8 +32,9 @@ function insertUser()
                 die('Could not insert: ' . mysqli_error());
        		}
       		mysqli_close($con);
-      	session_register("email");
-      	session_register("pwd");
+	session_start();
+	$_SESSION['email'] = $email;
+	$_SESSION['password'] = $pwd;  
 		echo"Congratulation! Your membership has been comfirmed.\r \n";
 		echo "<meta http-equiv='refresh' content='3; url=/index.php ' />\n";
 	}

@@ -25,8 +25,9 @@ $count=mysqli_num_rows($result);
 if($count==1)
 {
 	// Register $myusername, $mypassword and redirect to file "login_success.php"
-	session_register("email");
-	session_register("password"); 
+	session_start();
+	$_SESSION['email'] = $email;
+	$_SESSION['password'] = $password;  
 	header("location: index.php");
 }
 else 

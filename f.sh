@@ -1,6 +1,8 @@
 #!/bin/bash
-FILES="/home/yutong/ioeweb/*"
-for f in $FILES
+FILESPYT="/home/yutong/ioeweb/*"
+FILESAAVEN="/Users/aavenjin/Documents/AAF/wharton_data/*"
+FILESTEST="/Users/aavenjin/Documents/AAF/testdata/*"
+for f in $FILESAAVEN
 do
- sudo curl -s http://localhost/insertcsv.php?filename=$f
+	sudo curl -s http://localhost/ioe_loadcsv.php?filename=$f
 done

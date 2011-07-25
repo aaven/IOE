@@ -1,20 +1,51 @@
 <?php
+    
+echo"use this php for only once";
 
-function createEquityTable(){
-	include ('ioe_dbconfig.php');
-	$sql="CREATE TABLE EquityTable (tablename VARCHAR(20), current_name VARCHAR(7) NOT NULL UNIQUE, update_start_date DATE DEFAULT '00-00-00', update_end_date DATE DEFAULT '00-00-00', PRIMARY KEY(tablename))";
-	if(!mysqli_query($con,$sql))
+
+function createTables(){
+    include ('ioe_dbconfig.php');
+    echo "<p/>starting init $dbname<p/>";
+	
+	for ($i = 2000; $i <= 2011; $i++) 
 	{
-		die('Could not create EquityTable: ' . mysqli_error());
+		$tname = "TickerListTable" . $i;
+    	$sql="CREATE TABLE $tname (sname VARCHAR(7), ticker VARCHAR(10), PRIMARY KEY(sname))";
+		if(!mysqli_query($con,$sql))
+		{
+			echo"<p/>Could not create $tname: " . mysqli_error();
+		}
 	}
 	
-	$sql="CREATE TABLE AliasTable (name VARCHAR(7) NOT NULL, start_date DATE DEFAULT '00-00-00', end_date DATE DEFAULT '00-00-00', current_name VARCHAR(7) NOT NULL, PRIMARY KEY(name, start_date))";
+	$sql="CREATE TABLE CompanyTable (cid int, cname VARCHAR(120), PRIMARY KEY(cid), UNIQUE(cname))";
 	if(!mysqli_query($con,$sql))
 	{
-		die('Could not create AliasTable: ' . mysqli_error());
+		echo"<p/>Could not create CompanyTable: " . mysqli_error();
 	}
-	echo "successfully init $dbname";
+	
+	$sql="CREATE TABLE CurrentSymbolTable (sname VARCHAR(7), t1 DATE DEFAULT '2000-01-01', cid int, PRIMARY KEY(sname), FOREIGN KEY (cid) REFERENCES CompanyTable(cid) ON DELETE CASCADE ON UPDATE CASCADE)";
+	if(!mysqli_query($con,$sql))
+	{
+		echo"<p/>Could not create CurrentSymbolTable: " . mysqli_error();
+	}
+	
+	$sql="CREATE TABLE HistorySymbolTable (sname VARCHAR(7), t1 DATE DEFAULT '2000-01-01', t2 DATE DEFAULT '2010-12-31', cid int, PRIMARY KEY(sname, t1, t2), FOREIGN KEY (cid) REFERENCES CompanyTable(cid) ON DELETE CASCADE ON UPDATE CASCADE)";
+	if(!mysqli_query($con,$sql))
+	{
+		echo"<p/>Could not create HistorySymbolTable: " . mysqli_error();
+	}
+    
+    $sql="CREATE TABLE tempCSV (date DATE, cname VARCHAR(40), SHRCLS VARCHAR(2), ticker VARCHAR(10), cid int, BIDLO DOUBLE, ASKHI DOUBLE, PRC DOUBLE, VOL BIGINT, OPENPRC DOUBLE, PRIMARY KEY(date))";
+	if(!mysqli_query($con,$sql))
+	{
+		echo"<p/>Could not create tempCSV: " . mysqli_error();
+	}
+    
+    
+	echo "<p/>finish init $dbname";
+    mysqli_close($con);
 }
 
-createEquityTable();
+createTables();
+
 ?>

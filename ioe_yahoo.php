@@ -1,7 +1,7 @@
 <form name='upcoming_form' method='GET'>
-Quote: <input name='quote' id='quote' type='text' size='20'/><br/>
-Start Date: <input name='start' id='start_date' type='text' size='20'/><br/>
-End Date: <input name='end' id='end_date' type='text' size='20'/><br/>
+Quote: <input name='quote' id='quote' type='text' size='20' value='AAPL'/><br/>
+Start Date: <input name='start' id='start_date' type='text' size='20' value='2000-01-01'/><br/>
+End Date: <input name='end' id='end_date' type='text' size='20' value='2010-12-31'/><br/>
 <p><button id='extract'>Extract data</button></p>
 </form>
 

@@ -590,11 +590,6 @@ if (!$error && isset($_REQUEST["start"]) && isset($_REQUEST["foffset"]) && preg_
           $dumpline .= gzgets($file, DATA_CHUNK_LENGTH);
       }
       if ($dumpline==="") break;
-        if ($linenumber == 1) {
-            $linenumber++;
-            continue;
-        }
-
 
 // Remove UTF8 Byte Order Mark at the file beginning if any
 
@@ -614,6 +609,10 @@ if (!$error && isset($_REQUEST["start"]) && isset($_REQUEST["foffset"]) && preg_
           // remove non-numeric character except for dot
           $dumpline[count($dumpline)-1] = preg_replace("/[^0-9,.]/", "", $last);
           
+          if ($dumpline[0] == "DATE") {
+              echo("<p>skip $linenumber</p>\n");
+              continue;
+          }
           if ($dumpline[5] == "" || $dumpline[6] == "" || $dumpline[7] == "" || $dumpline[8] == "" || $dumpline[9] == ""){
               echo("<p>empty data: $dumpline[0], $dumpline[1], $dumpline[3], $dumpline[4], $dumpline[5], $dumpline[6], $dumpline[7], $dumpline[8], $dumpline[9].</p>\n");
               continue;

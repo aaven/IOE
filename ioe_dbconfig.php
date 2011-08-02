@@ -6,7 +6,7 @@ $dbname = 'ioefinance';
 $con=mysqli_connect($dbhost,$dbuser,$dbpwd,$dbname);
 if(!$con)
 {
-    die('Could not connect: ' . mysqli_error());
+    die('Could not connect: ' . mysqli_error($con));
 }
 ?>
 

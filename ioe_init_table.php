@@ -7,8 +7,6 @@ function createTables(){
     include ('ioe_dbconfig.php');
     echo "<p/>Starting init $dbname<p/>";
     
-    $temptable = "tempcsv";
-    $indextable = "indextable";
 	/*
 	for ($i = 2000; $i <= 2011; $i++) 
 	{
@@ -20,7 +18,7 @@ function createTables(){
 		}
 	}
 	*/
-	$sql = "CREATE TABLE $indextable (ticker VARCHAR(6) NOT NULL, cid INT NOT NULL, cname VARCHAR(50) NOT NULL, start DATE DEFAULT '2000-01-01' NOT NULL, end DATE DEFAULT '2010-12-31' NOT NULL, PRIMARY KEY (ticker,start), UNIQUE(ticker,end), UNIQUE(cid,start), UNIQUE(cid,end))";
+	$sql = "CREATE TABLE $indextable (ticker VARCHAR(10) NOT NULL, cid INT NOT NULL, cname VARCHAR(50) NOT NULL, start DATE DEFAULT '2000-01-01' NOT NULL, end DATE DEFAULT '2010-12-31' NOT NULL, PRIMARY KEY (ticker,start), UNIQUE(ticker,end), UNIQUE(cid,start), UNIQUE(cid,end))";
 	if (!mysqli_query($con,$sql))
 	{
 		echo ("<p/>Could not create $indextable: " . mysqli_error($con));

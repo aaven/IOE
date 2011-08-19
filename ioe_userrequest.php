@@ -10,13 +10,13 @@ http://www.somacon.com/p117.php
 <body>
 <form name='upcoming_form' method='GET'>
 <select name="ticker">
-<option value="snp">SNP</option>
+<option value="snp" selected="selected">SNP</option>
 <option value="russell">Russell</option>
 <option value="nasdaq">Nasdaq</option>
 </select>
 
 <select name="smonth">
-<option value='01'>January</option>
+<option value='01' selected="selected">January</option>
 <option value='02'>February</option>
 <option value='03'>March</option>
 <option value='04'>April</option>
@@ -31,7 +31,7 @@ http://www.somacon.com/p117.php
 </select>
 
 <select name="sday" >
-<option value='01'>01</option>
+<option value='01' selected="selected">01</option>
 <option value='02'>02</option>
 <option value='03'>03</option>
 <option value='04'>04</option>
@@ -65,7 +65,7 @@ http://www.somacon.com/p117.php
 </select>
 
 <select name="syear">
-<option value='2000'>2000</option>
+<option value='2000' selected="selected">2000</option>
 <option value='2001'>2001</option>
 <option value='2002'>2002</option>
 <option value='2003'>2003</option>
@@ -79,7 +79,7 @@ http://www.somacon.com/p117.php
 </select>
 
 <select name="emonth">
-<option value='01'>January</option>
+<option value='01' selected="selected">January</option>
 <option value='02'>February</option>
 <option value='03'>March</option>
 <option value='04'>April</option>
@@ -90,7 +90,7 @@ http://www.somacon.com/p117.php
 <option value='09'>September</option>
 <option value='10'>October</option>
 <option value='11'>November</option>
-<option value='12'selected="selected">December</option>
+<option value='12'>December</option>
 </select>
 
 <select name="eday" >
@@ -128,7 +128,7 @@ http://www.somacon.com/p117.php
 </select>
 
 <select name="eyear">
-<option value='2000'>2000</option>
+<option value='2000' selected="selected">2000</option>
 <option value='2001'>2001</option>
 <option value='2002'>2002</option>
 <option value='2003'>2003</option>
@@ -138,7 +138,7 @@ http://www.somacon.com/p117.php
 <option value='2007'>2007</option>
 <option value='2008'>2008</option>
 <option value='2009'>2009</option>
-<option value='2010'selected="selected">2010</option>
+<option value='2010'>2010</option>
 </select><br /><br />
 <input type="submit" value="Get tickerlist"><br />
 
@@ -245,7 +245,7 @@ if (isset($_GET['ticker']) && isset($_GET['smonth']) && isset($_GET['sday']) && 
             foreach ($tickers as $tt) {
                 $tickers_in_index = $tickers_in_index . $tt . " ";
                 
-                $ss = "SELECT cid FROM $indextable WHERE ticker = '$tt' AND end >= '$start' AND start <= '$end'";
+                $ss = "SELECT DISTINCT cid FROM $indextable WHERE ticker = '$tt' AND end >= '$start' AND start <= '$end'";
                 if (!$ress = mysqli_query($con,$ss)) {
                     $e = mysqli_error($con);
                     echo ("<p/>FAIL to select from $indextable: $e");
@@ -253,21 +253,27 @@ if (isset($_GET['ticker']) && isset($_GET['smonth']) && isset($_GET['sday']) && 
                     if (mysqli_num_rows($ress) > 0) {
                         $tickers_in_db = $tickers_in_db . $tt . " ";   
                    
-                        // export data to excel     
-                /*
-                 while ($rr = mysqli_fetch_row($ress)) {
-                    $ctable = "CompanyTable" . $rr[0];
-                    $sss = "SELECT * FROM $ctable WHERE date >= '$start' AND date <= '$end'";
-                    if (!$resss = mysqli_query($con,$sss)) {
-                        $e = mysqli_error();
-                        echo ("<p/>FAIL to select from $ctable: $e\n");
-                    } else {
-                        while ($rrr = mysqli_fetch_row($resss)) {
-                            echo ("<p/>$rrr[0] $rrr[1] $rrr[2] $rrr[3] $rrr[4] $rrr[5]\n");
+                        // export data to csv
+                        while ($rr = mysqli_fetch_row($ress)) {
+                            $ctable = "CompanyData" . $rr[0];
+                            $sss = "SELECT * FROM $ctable WHERE date >= '$start' AND date <= '$end'";
+                            if (!$resss = mysqli_query($con,$sss)) {
+                                $e = mysqli_error($con);
+                                echo ("<p/>FAIL to select data for $tt from $ctable: $e\n");
+                            } else {
+                                $csvname = "db$tt.csv";
+                                echo ("<p/>Created $csvname with id $rr[0]\n");
+                                $fp = fopen($csvname, 'w');
+                                fputcsv($fp, array('date','low','high','close','volume','open'));
+                                while ($rrr = mysqli_fetch_row($resss)) {
+                                    $list = array($rrr[0], $rrr[1], $rrr[2], $rrr[3], $rrr[4], $rrr[5]);
+                                    // echo ("<p/>$rrr[0] $rrr[1] $rrr[2] $rrr[3] $rrr[4] $rrr[5]\n");
+                                    fputcsv($fp, $list);
+                                }
+                                fclose($fp);
+                            }
                         }
-                    }
-                 }
-                 */
+                 
                     }
                 }
             }
